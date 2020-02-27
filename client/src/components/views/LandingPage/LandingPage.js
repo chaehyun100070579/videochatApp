@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 // import axios from 'axios';
+import io from 'socket.io-client'
 
 function LandingPage(props) {
     const localVideoref = React.createRef();
@@ -7,12 +8,28 @@ function LandingPage(props) {
     const pc_config = null;
     var pc = new RTCPeerConnection(pc_config);
     var textref;
-
+    const socket = io.connect('http://localhost:5000');
+    var candidates = [];
+    
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => { 
+        socket.on('connection-success', success => {
+            console.log(success)
+        })
+
+        socket.on('offerOrAnswer', (sdp) => {
+            textref.value = JSON.stringify(sdp)
+        })
+
+        console.log(candidates)
+        socket.on('candidate', (candidate) => {
+            candidates =  [...candidates , candidate]
+            console.log(candidates)
+        })
+        
         pc.onicecandidate = (e) => {
-            if(e.candidate){
-                console.log(JSON.stringify(e.candidate));
+            if(e.candidate){ 
+                sendToPeer('candidate', e.candidate)
             }
         }
         pc.oniceconnectionstatechange = (e) => {
@@ -38,12 +55,20 @@ function LandingPage(props) {
         .catch( failure );
     }); 
 
+    const sendToPeer = (messageType, payload) => {
+        socket.emit(messageType, {
+            socketID: socket.id,
+            payload
+        })
+    }
+
     const createOffer = () => {
         console.log('Offer');
         pc.createOffer({offerToReceiveVideo: 1})
             .then(sdp => {
-                console.log(JSON.stringify(sdp));
+                // console.log(JSON.stringify(sdp));
                 pc.setLocalDescription(sdp);
+                sendToPeer('offerOrAnswer', sdp)
             }, e => {});
     }
 
@@ -56,16 +81,21 @@ function LandingPage(props) {
         console.log('Answer');
         pc.createAnswer({offerToReceiveVideo:1})
             .then(sdp => {
-                console.log(JSON.stringify(sdp));
+                // console.log(JSON.stringify(sdp));
                 pc.setLocalDescription(sdp);
+                sendToPeer('offerOrAnswer', sdp)
             }, e => {});
     }
 
     const addCandidate = () => {
-        const candidate = JSON.parse(textref.value)
-        console.log('Adding candidate:', candidate)
+        // const candidate = JSON.parse(textref.value)
+        // console.log('Adding candidate:', candidate)
 
-        pc.addIceCandidate(new RTCIceCandidate(candidate))
+        // pc.addIceCandidate(new RTCIceCandidate(candidate))
+        candidates.forEach(candidate => {
+            console.log(JSON.stringify(candidate))
+            pc.addIceCandidate(new RTCIceCandidate(candidate))
+        })
     }
 
     return (
