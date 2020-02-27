@@ -28,12 +28,13 @@ function LandingPage(props) {
 
         socket.on('offerOrAnswer', (sdp) => {
             textref.value = JSON.stringify(sdp)
+            pc.setRemoteDescription(new RTCSessionDescription(sdp))
         })
 
         console.log(candidates)
         socket.on('candidate', (candidate) => {
-            candidates =  [...candidates , candidate]
-            console.log(candidates)
+            // candidates =  [...candidates , candidate]
+            pc.addIceCandidate(new RTCIceCandidate(candidate))
         })
         
         pc.onicecandidate = (e) => {
@@ -81,10 +82,10 @@ function LandingPage(props) {
             }, e => {});
     }
 
-    const setRemoteDescription = () => {
-        const desc = JSON.parse(textref.value);
-        pc.setRemoteDescription(new RTCSessionDescription(desc));
-    }
+    // const setRemoteDescription = () => {
+    //     const desc = JSON.parse(textref.value);
+    //     pc.setRemoteDescription(new RTCSessionDescription(desc));
+    // }
 
     const createAnswer = () => {
         console.log('Answer');
@@ -96,16 +97,12 @@ function LandingPage(props) {
             }, e => {});
     }
 
-    const addCandidate = () => {
-        // const candidate = JSON.parse(textref.value)
-        // console.log('Adding candidate:', candidate)
-
-        // pc.addIceCandidate(new RTCIceCandidate(candidate))
-        candidates.forEach(candidate => {
-            console.log(JSON.stringify(candidate))
-            pc.addIceCandidate(new RTCIceCandidate(candidate))
-        })
-    }
+    // const addCandidate = () => {
+    //     candidates.forEach(candidate => {
+    //         console.log(JSON.stringify(candidate))
+    //         pc.addIceCandidate(new RTCIceCandidate(candidate))
+    //     })
+    // }
 
     return (
         <div>
@@ -131,9 +128,9 @@ function LandingPage(props) {
             <button onClick={createAnswer}>Answer</button>
             <br />
             <textarea ref={ref => {textref = ref}} />
-            <br />
+            {/* <br />
             <button onClick={setRemoteDescription}>Set Remote Desc</button>
-            <button onClick={addCandidate}>Add Candidate</button>
+            <button onClick={addCandidate}>Add Candidate</button> */}
         </div>
     );
 }
