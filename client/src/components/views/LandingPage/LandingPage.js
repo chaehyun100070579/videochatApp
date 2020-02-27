@@ -5,7 +5,16 @@ import io from 'socket.io-client'
 function LandingPage(props) {
     const localVideoref = React.createRef();
     const remoteVideoref = React.createRef();
-    const pc_config = null;
+    // const pc_config = null;
+
+    const pc_config = {
+        'iceServer':[
+            {
+                urls : 'stun:stun.l.google.com:19302'
+            }
+        ]
+    };
+
     var pc = new RTCPeerConnection(pc_config);
     var textref;
     const socket = io.connect('http://localhost:5000');
