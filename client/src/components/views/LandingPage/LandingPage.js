@@ -2,54 +2,54 @@ import React, { useEffect } from 'react';
 // import axios from 'axios';
 import io from 'socket.io-client'
 
-const localVideoref = React.createRef();
-const remoteVideoref = React.createRef();
-// const pc_config = null;
-
-const pc_config = {
-    'iceServer':[
-        {
-            urls : 'stun:stun.l.google.com:19302'
-        }
-    ]
-};
-
-var pc = new RTCPeerConnection(pc_config);
-var textref;
-const socket = io.connect('http://localhost:5000');
-var candidates = [];
-
-const sendToPeer = (messageType, payload) => {
-    socket.emit(messageType, {
-        socketID: socket.id,
-        payload
-    })
-}
-
-const createOffer = () => {
-    console.log('Offer');
-    pc.createOffer({offerToReceiveVideo: 1})
-        .then(sdp => {
-            // console.log(JSON.stringify(sdp));
-            pc.setLocalDescription(sdp);
-            sendToPeer('offerOrAnswer', sdp)
-        }, e => {});
-}
-
-const createAnswer = () => {
-    console.log('Answer');
-    pc.createAnswer({offerToReceiveVideo:1})
-        .then(sdp => {
-            // console.log(JSON.stringify(sdp));
-            pc.setLocalDescription(sdp);
-            sendToPeer('offerOrAnswer', sdp)
-        }, e => {});
-}
-
 function LandingPage(props) {
+    const localVideoref = React.createRef();
+    const remoteVideoref = React.createRef();
+    // const pc_config = null;
+
+    const pc_config = {
+        'iceServer':[
+            {
+                urls : 'stun:stun.l.google.com:19302'
+            }
+        ]
+    };
+
+    var pc = new RTCPeerConnection(pc_config);
+    var textref;
+    const socket = io.connect('http://localhost:5000');
+    // var candidates = [];
+
+    const sendToPeer = (messageType, payload) => {
+        socket.emit(messageType, {
+            socketID: socket.id,
+            payload
+        })
+    }
+
+    const createOffer = () => {
+        console.log('Offer');
+        pc.createOffer({offerToReceiveVideo: 1})
+            .then(sdp => {
+                // console.log(JSON.stringify(sdp));
+                pc.setLocalDescription(sdp);
+                sendToPeer('offerOrAnswer', sdp)
+            }, e => {});
+    }
+
+    const createAnswer = () => {
+        console.log('Answer');
+        pc.createAnswer({offerToReceiveVideo:1})
+            .then(sdp => {
+                // console.log(JSON.stringify(sdp));
+                pc.setLocalDescription(sdp);
+                sendToPeer('offerOrAnswer', sdp)
+            }, e => {});
+    }
    
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => { 
+        console.log('render finsehd')
         socket.on('connection-success', success => {
             console.log(success)
         })
@@ -59,7 +59,6 @@ function LandingPage(props) {
             pc.setRemoteDescription(new RTCSessionDescription(sdp))
         })
 
-        console.log(candidates)
         socket.on('candidate', (candidate) => {
             // candidates =  [...candidates , candidate]
             pc.addIceCandidate(new RTCIceCandidate(candidate))
