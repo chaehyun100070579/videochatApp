@@ -27,11 +27,11 @@ function LandingPage(props) {
             <h1 className='LandingPageTitle'>Live Chat</h1>
             <div className={classes.chatOptionBox} noValidate autoComplete="off">
                 <TextField id="outlined-basic" label="Add your Interests (optional)" variant="outlined" />
-                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href="ChatRoomPage">
+                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href="TextChatRoom">
                     Text
                 </Button>
                 <span style={{margin: '0'}}>or</span>
-                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href="ChatRoomPage">
+                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href="VideoChatRoom">
                     Video
                 </Button>
             </div>

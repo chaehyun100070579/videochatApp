@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 // import axios from 'axios';
 import io from 'socket.io-client'
 
-function ChatRoomPage(props) {
+function VideoChatRoom(props) {
     const localVideoref = React.createRef();
     const remoteVideoref = React.createRef();
     // const pc_config = null;
@@ -137,4 +137,4 @@ function ChatRoomPage(props) {
     );
 }
 
-export default ChatRoomPage;
+export default VideoChatRoom;

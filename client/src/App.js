@@ -6,7 +6,8 @@ import {
 } from "react-router-dom";
 
 import LandingPage from './components/views/LandingPage/LandingPage'
-import ChatRoomPage from './components/views/ChatRoomPage/ChatRoomPage';
+import TextChatRoom from './components/views/TextChatRoom/TextChatRoom';
+import VideoChatRoom from './components/views/VideoChatRoom/VideoChatRoom';
 
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
         */}
         <Switch>
           <Route exact path="/" component={LandingPage} />
-          <Route exact path="/ChatRoomPage" component={ChatRoomPage} />
+          <Route exact path="/TextChatRoom" component={TextChatRoom} />
+          <Route exact path="/VideoChatRoom" component={VideoChatRoom} />
         </Switch>
       </div>
     </Router>
