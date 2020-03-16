@@ -30,14 +30,14 @@ function LandingPage(props) {
     const [interestsParam, setInterestsParam] = useState([]);
 
     const addInterests = (event) => {
-        console.log(event.target.value)
+        event.preventDefault();
         let value = event.target.value;
         if (!value) return;
-        // let tag = value.trim().toLowerCase();
+        let tag = value.trim().toLowerCase();
         // let tag = value;
 
         for(var i=0; chipArr.length > i; i++){
-            if(chipArr[i].label === value ){
+            if(chipArr[i].tag === tag ){
                 return
             }
         }
@@ -45,9 +45,10 @@ function LandingPage(props) {
         setKeyCount(keyCount + 1);
         setChipArr([...chipArr, {
             key:keyCount,
-            label:value
+            label:value,
+            tag: tag
         }]);
-        setInterestsParam([...interestsParam, value]);
+        setInterestsParam([...interestsParam, tag]);
         
         event.target.value = '';
     }
@@ -57,9 +58,7 @@ function LandingPage(props) {
         setKeyCount(keyCount - 1);
     };
 
-    let textInput = React.createRef();
     const handleClickAway = () => {
-        console.log('textInput',textInput)
     };
   
     return (
@@ -80,18 +79,17 @@ function LandingPage(props) {
             <div id='chatOptionBox' className={classes.chatOptionBox} noValidate autoComplete="off">
                 <ClickAwayListener onClickAway={handleClickAway}>
                 <TextField 
-                    
                     id="outlined-basic" 
                     label="Add your Interests (optional)" 
                     variant="outlined" 
                     onKeyPress={ event => event.key === 'Enter' ? addInterests(event) : null}
                 />
                 </ClickAwayListener>
-                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href={`/TextChatRoom?topic=${interestsParam}`}>
+                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href={`/TextChatRoom?interests=${interestsParam}`}>
                     Text
                 </Button>
                 <span style={{margin: '0'}}>or</span>
-                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href={`/VideoChatRoom?topic=${interestsParam}`}>
+                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href={`/VideoChatRoom?interests=${interestsParam}`}>
                     Video
                 </Button>
             </div>
