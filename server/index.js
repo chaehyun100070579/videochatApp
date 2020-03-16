@@ -42,6 +42,11 @@ app.io.on('connection', function(socket) {
         }
     })
 
+    socket.on('join', ({interests}, callback)=>{
+        for(var i=0; i < interests.length; i ++){
+            console.log(interests[i])
+        }
+    })
 })
 
 // var io = require('socket.io')

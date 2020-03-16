@@ -25,8 +25,9 @@ const useStyles = makeStyles(theme => ({
 
 function LandingPage(props) {
     const classes = useStyles();
-    const [interestsArr, setInterestsArr] = useState([]);
+    const [chipArr, setChipArr] = useState([]);
     const [keyCount, setKeyCount] = useState(0);
+    const [interestsParam, setInterestsParam] = useState([]);
 
     const addInterests = (event) => {
         console.log(event.target.value)
@@ -35,20 +36,24 @@ function LandingPage(props) {
         // let tag = value.trim().toLowerCase();
         // let tag = value;
 
-        for(var i=0; interestsArr.length > i; i++){
-            if(interestsArr[i].label === value ){
+        for(var i=0; chipArr.length > i; i++){
+            if(chipArr[i].label === value ){
                 return
             }
         }
 
         setKeyCount(keyCount + 1);
-        interestsArr.push({key:keyCount, label:value})
+        setChipArr([...chipArr, {
+            key:keyCount,
+            label:value
+        }]);
+        setInterestsParam([...interestsParam, value]);
         
         event.target.value = '';
     }
 
     const handleDelete = chipToDelete => () => {
-        setInterestsArr(chips => chips.filter(chip => chip.key !== chipToDelete.key));
+        setChipArr(chips => chips.filter(chip => chip.key !== chipToDelete.key));
         setKeyCount(keyCount - 1);
     };
 
@@ -61,7 +66,7 @@ function LandingPage(props) {
         <div>
             <h1 className='LandingPageTitle'>Live Chat</h1>
             <div id='chatboxTag'>
-                {interestsArr.map(data => {
+                {chipArr.map(data => {
                         return (
                         <Chip
                             key={data.key}
@@ -82,12 +87,11 @@ function LandingPage(props) {
                     onKeyPress={ event => event.key === 'Enter' ? addInterests(event) : null}
                 />
                 </ClickAwayListener>
-
-                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href="TextChatRoom">
+                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href={`/TextChatRoom?topic=${interestsParam}`}>
                     Text
                 </Button>
                 <span style={{margin: '0'}}>or</span>
-                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href="VideoChatRoom">
+                <Button className={classes.ChatRoomButton} variant="contained" color="primary" href={`/VideoChatRoom?topic=${interestsParam}`}>
                     Video
                 </Button>
             </div>
