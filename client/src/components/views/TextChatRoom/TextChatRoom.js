@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 
+import InfoBar from '../InfoBar/InfoBar';
+
 import './TextChatRoom.css';
 
 let socket;
@@ -46,13 +48,21 @@ function TextChatRoom({location}) {
 
     return (
         <div className="outerContainer">
-            <h4>you both like {interestString} </h4>
             <div className="container">
-                <input 
-                    value={message} 
-                    onChange={(event) => setMessage(event.target.value)}
-                    onKeyPress={event => event.key ==='Enter' ? sendMessage(event) : null} 
-                 />
+                <div className ="logWrapper">
+                    <InfoBar/>
+                    <span>You're now chatting with a random stranger</span> 
+                    <span className="interestTitle">you both like {interestString} </span>
+                </div>
+                
+                <div className="messageWrapper">
+                    <textarea 
+                        className="messageTextArea"
+                        value={message} 
+                        onChange={(event) => setMessage(event.target.value)}
+                        onKeyPress={event => event.key ==='Enter' ? sendMessage(event) : null} 
+                    />
+                </div>
             </div>
         </div>
     );

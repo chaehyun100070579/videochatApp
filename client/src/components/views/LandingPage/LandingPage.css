@@ -1,8 +1,17 @@
 .LandingPageTitle {
-    margin: 10px;
+    margin: 0px;
     text-align: center;
 }
 
 #chatOptionBox, #chatboxTag {
     text-align: center;
+    width: auto;
+}
+
+.landingPageOuterContainer{
+    min-width: 650px;
+    background-color: #F5EFFF;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }

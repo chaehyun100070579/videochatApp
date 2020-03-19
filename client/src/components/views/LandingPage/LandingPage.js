@@ -62,7 +62,7 @@ function LandingPage(props) {
     };
   
     return (
-        <div>
+        <div className="landingPageOuterContainer">
             <h1 className='LandingPageTitle'>Live Chat</h1>
             <div id='chatboxTag'>
                 {chipArr.map(data => {
