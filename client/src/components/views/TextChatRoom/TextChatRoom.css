@@ -29,6 +29,7 @@
   }
   
   .messageWrapper{
+    display: flex;
     height: 15%;
     background-color: #F5EFFF;
   }
@@ -38,4 +39,26 @@
     margin: 10px 10px 10px 0px;
     width: calc(100% - 6px);
   }
+
+  .sendButton {
+    color: #fff;
+    text-decoration: none;
+    background: #2979FF;
+    /* display: inline-block; */
+    border: none;
+    width: 7em;
+    margin: 10px 0px 10px 0px;
+  }
+
+  .sendButton:hover {
+    cursor: pointer;
+    color: black;
+  }
+
+  .btnkbshortcut {
+    margin-top: .25em;
+    font-size: .8em;
+    color: #9CF;
+  }
+
 
