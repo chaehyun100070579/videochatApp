@@ -3,6 +3,8 @@ import queryString from 'query-string';
 import io from 'socket.io-client';
 
 import InfoBar from '../InfoBar/InfoBar';
+import Messages from '../Messages/Messages';
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 import './TextChatRoom.css';
 
@@ -30,16 +32,23 @@ function TextChatRoom({location}) {
         }
     },[ENDPOINT, location.search]);
 
-    useEffect(() =>{
-        socket.on('message', (message) => {
-            setMessages([...messages, message])
-        })
+    // useEffect(() =>{
+    //     socket.on('message', (message) => {
+    //         setMessages([...messages, message])
+    //     })
 
-    }, [messages]);
+    // }, [messages]);
 
+    useEffect(() => {
+        socket.on('message', message => {
+          setMessages(messages => [ ...messages, message ]);
+        });
+    }, []);
+
+    
     const sendMessage = (event) => {
+        console.log(event.key)
         event.preventDefault();
-        console.log(event)
         if(message){
             socket.emit('sendMessage', message, () => setMessage(''));
         }
@@ -49,12 +58,18 @@ function TextChatRoom({location}) {
     return (
         <div className="outerContainer">
             <div className="container">
+          
                 <div className ="logWrapper">
                     <InfoBar/>
+
                     <span>You're now chatting with a random stranger</span> 
-                    <span className="interestTitle">you both like {interestString} </span>
+                    {interestString && <span className="interestTitle">you both like {interestString} </span>}
+                   
+                    <ScrollToBottom className="messageLog">
+                            <Messages messages={messages} name='stranger' />
+                    </ScrollToBottom>
+               
                 </div>
-                
                 <div className="messageWrapper">
                     <textarea 
                         className="messageTextArea"

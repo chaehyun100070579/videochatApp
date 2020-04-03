@@ -20,10 +20,6 @@ app.io.on('connection', function(socket) {
 
     socket.emit('connection-success', {success: socket.id});
     connectedPeers.set(socket.id, socket);
-    
-    socket.on('disconnect', () =>{
-        connectedPeers.delete(socket.id)
-    });
 
     socket.on('offerOrAnswer', (data) =>{
         for(const [socketID, socket] of connectedPeers.entries()){
@@ -54,6 +50,8 @@ app.io.on('connection', function(socket) {
 
         socket.join(user.interests);
 
+        app.io.to(user.interests).emit('roomData', {interests: user.interests, users: getUsersInRoom(user.interests)})
+
         callback();
     });
 
@@ -62,9 +60,25 @@ app.io.on('connection', function(socket) {
         const user = getUser(socket.id);
         console.log('userrrrrrrrrrr',user)
         app.io.to(user.interests).emit('message', { user: user.id, text: message});
+        app.io.to(user.interests).emit('roomData', { user: user.id, text: message});
      
         callback();
     });
+
+    socket.on('disconnect', () =>{
+        // connectedPeers.delete(socket.id)
+        const user = removeUser(socket.id);
+        if(user) {
+            app.io.to(user.interests).emit('message', { user: 'Admin', text: `stranger has left.` });
+            app.io.to(user.interests).emit('roomData', { room: user.interests, users: getUsersInRoom(user.interests)});
+        }
+    });
+
+    // socket.on('disconnect', () => {
+       
+    // });
+
+
 
 
 })
