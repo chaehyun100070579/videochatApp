@@ -28,8 +28,10 @@ function LandingPage(props) {
     const [chipArr, setChipArr] = useState([]);
     const [keyCount, setKeyCount] = useState(0);
     const [interestsParam, setInterestsParam] = useState([]);
+    var [interestTag, setInterestTag] = useState('');
 
     const addInterests = (event) => {
+        console.log(event.key)
         event.preventDefault();
         let value = event.target.value;
         if (!value) return;
@@ -58,7 +60,30 @@ function LandingPage(props) {
         setKeyCount(keyCount - 1);
     };
 
+    const handleOnChange = (value) => {
+        setInterestTag(interestTag = value);
+    };
+
     const handleClickAway = () => {
+        if (!interestTag) return;
+        let value = interestTag;
+        let tag = value.trim().toLowerCase();
+        // let tag = value;
+
+        for(var i=0; chipArr.length > i; i++){
+            if(chipArr[i].tag === tag ){
+                return
+            }
+        }
+
+        setKeyCount(keyCount + 1);
+        setChipArr([...chipArr, {
+            key:keyCount,
+            label:value,
+            tag: tag
+        }]);
+        setInterestsParam([...interestsParam, tag]);
+        setInterestTag(interestTag = '');
     };
   
     return (
@@ -79,10 +104,13 @@ function LandingPage(props) {
             <div id='chatOptionBox' className={classes.chatOptionBox} noValidate autoComplete="off">
                 <ClickAwayListener onClickAway={handleClickAway}>
                 <TextField 
-                    id="outlined-basic" 
+                    id="interestTextField" 
                     label="Add your Interests (optional)" 
                     variant="outlined" 
                     onKeyPress={ event => event.key === 'Enter' ? addInterests(event) : null}
+                    onKeyDown={ event => event.key === 'Escape' ? addInterests(event) : null}
+                    value = {interestTag}
+                    onChange={event => handleOnChange(event.target.value)}
                 />
                 </ClickAwayListener>
                 <Button className={classes.ChatRoomButton} variant="contained" color="primary" href={`/TextChatRoom?interests=${interestsParam}`}>
