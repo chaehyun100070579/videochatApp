@@ -31,7 +31,6 @@ function LandingPage(props) {
     var [interestTag, setInterestTag] = useState('');
 
     const addInterests = (event) => {
-        console.log(event.key)
         event.preventDefault();
         let value = event.target.value;
         if (!value) return;
@@ -53,6 +52,7 @@ function LandingPage(props) {
         setInterestsParam([...interestsParam, tag]);
         
         event.target.value = '';
+        setInterestTag(interestTag = '');
     }
 
     const handleDelete = chipToDelete => () => {
@@ -108,7 +108,6 @@ function LandingPage(props) {
                     label="Add your Interests (optional)" 
                     variant="outlined" 
                     onKeyPress={ event => event.key === 'Enter' ? addInterests(event) : null}
-                    onKeyDown={ event => event.key === 'Escape' ? addInterests(event) : null}
                     value = {interestTag}
                     onChange={event => handleOnChange(event.target.value)}
                 />
