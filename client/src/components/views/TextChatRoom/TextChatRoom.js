@@ -16,26 +16,26 @@ function TextChatRoom({location}) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     var [stopButtonText, setStopButtonText] = useState('Stop');
-   
+
     useEffect(() =>{
         const {interests} = queryString.parse(location.search);
         setInteretString(interests)
 
         socket = io(ENDPOINT);
-      
+
         socket.emit('join', {interests}, () =>{
         });
         
         socket.on('message', message => {
             setMessages(messages => [ ...messages, message ]);
         });
-          
+
         return () => {
             socket.emit('disconnect')
             socket.off();
         }
     },[ENDPOINT, location.search]);
- 
+
     // useEffect(() => {
     //     socket.on('message', message => {
     //       setMessages(messages => [ ...messages, message ]);
@@ -56,7 +56,7 @@ function TextChatRoom({location}) {
             document.removeEventListener("keydown", backToHome, false);
         };
     });
-   
+    
     const backToHome = (event) => {
         if(stopButtonText === 'Really'){
             setStopButtonText(stopButtonText='New')
@@ -84,7 +84,7 @@ function TextChatRoom({location}) {
                 <div className="messageWrapper">
                             <a href="/">
                                 <button className="stopButton" id={stopButtonText}>
-                                     {stopButtonText}
+                                    {stopButtonText}
                                     <span className="btnshortcut">Esc</span>
                                 </button>
                             </a>
